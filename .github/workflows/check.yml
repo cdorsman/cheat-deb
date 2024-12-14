@@ -25,9 +25,9 @@ jobs:
               gh run cancel ${{ github.run_id }}
           fi
 
-          if [ "${APP_NAME}" != "" ]; then
+          if [[ "${APP_NAME}" != "" ]]; then
               URL="https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest"
-          elif [ "${REPO_USER}" != "" ]; then
+          elif [[ "${REPO_USER}" != "" ]]; then
               URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
           fi
 
