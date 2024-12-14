@@ -22,12 +22,12 @@ jobs:
         run: |
           if [ "${APP_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
               echo "Cannot have both variables defined"
-              exit(1)
+              exit 1
           fi
         
-          if [[ "${APP_NAME}" != "" ]]; then
+          if [ "${APP_NAME}" != "" ]; then
               URL="https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest"
-          elif [[ "${REPO_USER}" != "" ]]; then
+          elif [ "${REPO_USER}" != "" ]; then
               URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
           fi
           
