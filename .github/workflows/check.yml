@@ -20,8 +20,7 @@ jobs:
       - name: Define URL
         run: |
           # Check if there are values to define URL
-          [[ "$REPO_NAME" != "" ]] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
-          [[ "$REPO_USER" != "" ]] && echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $GITHUB_ENV
+          [[ $REPO_NAME != "" ]] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV || exit 1; gh run cancel $GITHUB_RUN_ID
 
       - name: Get release
         id: get_release
