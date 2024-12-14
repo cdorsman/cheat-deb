@@ -16,8 +16,8 @@ jobs:
       - name: Store artifacts
         run: |
           # Store the newly fetched release version in a file
-          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > xyz-release-info
-          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to xyz-release-info"
+          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > {{ repo_name }}-release-info
+          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to {{ repo_name }}-release-info"
 
       - name: Upload new artifacts
         uses: actions/upload-artifact@v3
