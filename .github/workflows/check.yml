@@ -20,18 +20,14 @@ jobs:
       - name: Define URL
         id: define_url
         run: |
-          [ -n "$REPO_NAME" ] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
-          [ -n "$REPO_USER" ] && echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV
-
           if [[ ${{ repo_name }} != "" ]]; then
               echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
           elif [[ ${{ repo_user }} != "" ]]; then
-              echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest"
+              echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV
           else
               echo "No URL defined"; exit 1
               gh run cancel github.run_id
           fi
-        
 
       - name: Get release
         id: get_release
