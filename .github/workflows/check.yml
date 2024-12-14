@@ -20,9 +20,9 @@ jobs:
       - name: Define URL
         id: define_url
         run: |
-          if [[ "$REPO_NAME" != "" ]]; then
+          if [ -n "$REPO_NAME" ]; then
               echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV; echo "Url: $URL"
-          elif [[ "$REPO_USER" != "" ]]; then
+          elif [ -n "$REPO_USER" ]; then
               echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV; echo "Url: $URL"
           fi
 
