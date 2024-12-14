@@ -20,7 +20,7 @@ jobs:
       - name: Get latest release
         id: get_release
         run: |
-          if [[ "${APP_NAME}" != "" && "${REPO_USER}" != "" ]]; then
+          if [ "${APP_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
               echo "Cannot have both variables defined"
               exit(1)
           fi
