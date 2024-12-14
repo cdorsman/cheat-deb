@@ -12,16 +12,21 @@ jobs:
           RELEASE_TAG=$(curl -s https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
           echo "latest release: $RELEASE_TAG"
-      
-      - name: Store artifacts
-        run: |
-          # Store the newly fetched release version in a file
-          mkdir release
-          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > release/cheat-release-info
-          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to release/cheat-release-info"
 
-      - name: Upload new artifacts
-        uses: actions/upload-artifact@v3
+      - name: Get release
+        uses: actions/checkout@v4
         with:
-          name: release/cheat-release-info"
-          path: release/cheat-release-info"
+          repository: cheat/cheat
+          ref: refs/tags/v$RELEASE_TAG
+      
+      #- name: Store artifacts
+      #  run: |
+      #    # Store the newly fetched release version in a file
+      #    mkdir release
+      #    echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > release/cheat-release-info
+      #    echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to release/cheat-release-info"
+
+      #- name: Upload new artifacts
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    path: path: ${{ github.run_number }}
