@@ -1,0 +1,26 @@
+name: Create Debian package
+on:
+  schedule:
+    - cron: '30 5 * * 1,3'
+
+jobs:
+  build:
+    name: Build 
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: jiro4989/build-deb-action@v2.1.0
+      with:
+        # Working directory relative to the root directory.
+        package: cheat
+        # Working directory relative to the root directory.
+        package_root: /
+        # Report level for reviewdog [info,warning,error]
+        maintainer: cdorsnman
+        # Reporter of reviewdog command [github-pr-check,github-pr-review].
+        version: added
+        # Filtering mode for the reviewdog command [added,diff_context,file,nofilter]. Default is added.
+        arch: amd64 # optional, default is amd64
+        # description
+        desc: cheat allows you to create and view interactive cheatsheets on the command-line. It was designed to help remind *nix system administrators of options for commands that they use frequently, but not frequently enough to remember. # optional, default is 
+
+
