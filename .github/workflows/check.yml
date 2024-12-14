@@ -17,36 +17,25 @@ jobs:
           workflow: publish.yml
           if_no_artifact_found: error
 
-      - name: Determine URL
-        id: check_vars
-        run: |
-          if [ "${REPO_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
-              echo "Cannot have both variables defined" && exit 1
-              gh run cancel ${{ github.run_id }}
-          else:
-            exit 0
-          fi
-
       - name: Get latest release
         id: check_release
-        if: steps.check_vars.outcome == 'success'
         run: |
-          if [[ "${APP_NAME}" != "" ]]; then
+          if [[ "${REPO_NAME}" != "" ]]; then
               echo "URL=https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest" >> $GITHUB_OUTPUT
           elif [[ "${REPO_USER}" != "" ]]; then
               echo "URL=https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest" >> $GITHUB_OUTPUT
           fi
         
           # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -s https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+          RELEASE_TAG=$(curl -s $URL | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT; echo "latest release: $RELEASE_TAG"
 
       - name: Compare with previous release
         id: compare_release
         run: |
           # Read the release info from the downloaded artifact
-          PREVIOUS_RELEASE="$(cat ${APP_NAME}-release-info 2> /dev/null || echo 'NONE')"
-          echo "previous release: ${PREVIOUS_RELEASE}"
+          PREVIOUS_RELEASE="$(cat $APP_NAME-release-info 2> /dev/null || echo 'NONE')"
+          echo "previous release: $PREVIOUS_RELEASE"
 
           # Compare the fetched release tag with the previous release tag
           if [[ "${{ steps.get_release.outputs.RELEASE_TAG }}" != "${PREVIOUS_RELEASE}" ]]; then
