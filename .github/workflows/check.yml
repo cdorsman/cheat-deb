@@ -17,20 +17,27 @@ jobs:
           workflow: publish.yml
           if_no_artifact_found: error
 
-      - name: Get latest release
-        id: get_release
+      - name: Determine URL
+        id: check_vars
         run: |
-          if [ "${APP_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
+          if [ "${REPO_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
               echo "Cannot have both variables defined"
               exit 1
           fi
-        
+
           if [ "${APP_NAME}" != "" ]; then
               URL="https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest"
           elif [ "${REPO_USER}" != "" ]; then
               URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
           fi
-          
+
+      - name: Check if URL is defined
+        id: check_url
+        if: steps.check_vars.outcome == 'success'
+        run: echo $URL
+           
+      - name: Get latest release        
+        run: |
           # Fetch release information and extract the release tag
           RELEASE_TAG=$(curl -s ${URL} | jq -r ".tag_name")
           echo "release_tag=${RELEASE_TAG}" >> ${GITHUB_OUTPUT}
