@@ -17,15 +17,18 @@ jobs:
           workflow: publish.yml
           if_no_artifact_found: error
 
-      - name: Get latest release
-        id: check_release
+      - name: Define URL
+        id: define_url
         run: |
           if [[ "${REPO_NAME}" != "" ]]; then
               echo "URL=https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest" >> $GITHUB_OUTPUT
           elif [[ "${REPO_USER}" != "" ]]; then
               echo "URL=https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest" >> $GITHUB_OUTPUT
           fi
-        
+
+      - name: Get release
+        id: get_release
+        run: |
           # Fetch release information and extract the release tag
           RELEASE_TAG=$(curl -s $(echo $URL) | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT; echo "latest release: $RELEASE_TAG"
@@ -38,7 +41,7 @@ jobs:
           echo "previous release: $PREVIOUS_RELEASE"
 
           # Compare the fetched release tag with the previous release tag
-          if [[ "${{ steps.get_release.outputs.RELEASE_TAG }}" != "${PREVIOUS_RELEASE}" ]]; then
+          if [[ "${{ steps.check_release.outputs.RELEASE_TAG }}" != "${PREVIOUS_RELEASE}" ]]; then
             echo "release_changed=true" >> $GITHUB_OUTPUT
             echo "Release changed: true"
           else
