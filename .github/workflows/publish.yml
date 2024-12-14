@@ -16,11 +16,12 @@ jobs:
       - name: Store artifacts
         run: |
           # Store the newly fetched release version in a file
-          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > cheat-release-info
-          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to cheat-release-info"
+          mkdir release
+          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > release/cheat-release-info
+          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to release/cheat-release-info"
 
       - name: Upload new artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: cheat-release-info"
-          path: cheat-release-info"
+          name: release/cheat-release-info"
+          path: release/cheat-release-info"
