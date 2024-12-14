@@ -18,16 +18,10 @@ jobs:
           if_no_artifact_found: error
 
       - name: Define URL
-        id: define_url
         run: |
-          if [[ ${{ REPO_NAME }} != "" ]]; then
-              echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
-          elif [[ ${{ REPO_USER }} != "" ]]; then
-              echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV
-          else
-              echo "No URL defined"; exit 1
-              gh run cancel github.run_id
-          fi
+          # Check if there are values to define URL
+          [[ "$REPO_NAME" != "" ]] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
+          [[ "$REPO_USER" != "" ]] && echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $GITHUB_ENV
 
       - name: Get release
         id: get_release
