@@ -24,13 +24,13 @@ jobs:
       - name: Retrieve version
         id: version
         run: |
-          echo "TAG_NAME=$(cat release/cheat-release-info | grep -Po '(?<=Version>).*(?=</Version>)')" >> $GITHUB_OUTPUT
+          echo "TAG_NAME=$(cat release/cheat-release-info)" >> $GITHUB_OUTPUT
         
       - name: Check out repo
         uses: actions/checkout@v4
         with:
           repository: cheat/cheat
-          ref: refs/tags/v${{ env.RELEASE_TAG }}
+          ref: refs/tags/v${{ steps.version.outputs.TAG_NAME }}
 
       - name: Create Release
         id: create_release
