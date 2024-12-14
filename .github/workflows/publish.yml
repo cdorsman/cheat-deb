@@ -1,0 +1,26 @@
+name: Build
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Get latest release
+        id: get_release
+        run: |
+          # Fetch release information and extract the release tag
+          RELEASE_TAG=$(curl -s https://api.github.com/repos/chrisallenlane/cheat/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "latest release: $RELEASE_TAG"
+      
+      - name: Store artifacts
+        run: |
+          # Store the newly fetched release version in a file
+          echo "${{ steps.get_release.outputs.RELEASE_TAG }}" > xyz-release-info
+          echo "Saved ${{ steps.get_release.outputs.RELEASE_TAG }} to xyz-release-info"
+
+      - name: Upload new artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cheat-release-info
+          path: cheat-release-info
