@@ -21,9 +21,9 @@ jobs:
         id: define_url
         run: |
           if [ -n "$REPO_NAME" ]; then
-              echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV; echo "Url: $URL"
+              echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV; echo "Url: env.URL"
           elif [ -n "$REPO_USER" ]; then
-              echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV; echo "Url: $URL"
+              echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV; echo "Url: env.URL"
           fi
 
       - name: Get release
