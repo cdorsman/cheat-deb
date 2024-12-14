@@ -4,6 +4,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    permissions: 
+      id-token: write 
+      contents: read
     steps:
       - name: Get latest release
         id: get_release  
