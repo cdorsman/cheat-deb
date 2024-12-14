@@ -12,40 +12,32 @@ jobs:
         id: download-artifact
         uses: dawidd6/action-download-artifact@v2 # It's not possible to use actions/upload-artifact as of the time of writing
         with:
-          name: cheat-release-info
+          name: xyz-release-info
           workflow_conclusion: success
           workflow: publish.yml
-          if_no_artifact_found: error
+          if_no_artifact_found: warn
 
-      - name: Define URL
-        run: |
-          # Check if there are values to define URL
-          [[ $REPO_NAME != "" ]] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV || exit 1; gh run cancel $GITHUB_RUN_ID
-
-      - name: Get release
+      - name: Get latest release
         id: get_release
         run: |
-          if [ -n $URL ]; then
-            # Fetch release information and extract the release tag
-            RELEASE_TAG=$(curl -s env.URL | jq -r '.tag_name')
-            echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT; echo "latest release: $RELEASE_TAG"
-          else
-
-          fi
+          # Fetch release information and extract the release tag
+          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "latest release: $RELEASE_TAG"
 
       - name: Compare with previous release
         id: compare_release
         run: |
           # Read the release info from the downloaded artifact
-          PREVIOUS_RELEASE="$(cat $APP_NAME-release-info 2> /dev/null || echo 'NONE')"
+          PREVIOUS_RELEASE=$(cat cheat-release-info 2> /dev/null || echo "NONE")
           echo "previous release: $PREVIOUS_RELEASE"
 
           # Compare the fetched release tag with the previous release tag
-          if [[ "${{ steps.check_release.outputs.RELEASE_TAG }}" != "${PREVIOUS_RELEASE}" ]]; then
+          if [ "${{ steps.get_release.outputs.RELEASE_TAG }}" != "$PREVIOUS_RELEASE" ]; then
             echo "release_changed=true" >> $GITHUB_OUTPUT
             echo "Release changed: true"
           else
-            echo "release_changed=false" >> ${GITHUB_OUTPUT}
+            echo "release_changed=false" >> $GITHUB_OUTPUT
             echo "Release changed: false"
           fi
 
