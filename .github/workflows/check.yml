@@ -25,19 +25,16 @@ jobs:
               gh run cancel ${{ github.run_id }}
           fi
 
+      - name: Get latest release
+        id: check_release
+        if: steps.check_vars.outcome == 'success'
+        run: |
           if [[ "${APP_NAME}" != "" ]]; then
               URL="https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest"
           elif [[ "${REPO_USER}" != "" ]]; then
               URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
           fi
-
-      - name: Check if URL is defined
-        id: check_url
-        if: steps.check_vars.outcome == 'success'
-        run: echo $URL
-           
-      - name: Get latest release        
-        run: |
+        
           # Fetch release information and extract the release tag
           RELEASE_TAG=$(curl -s ${URL} | jq -r ".tag_name")
           echo "release_tag=${RELEASE_TAG}" >> ${GITHUB_OUTPUT}
