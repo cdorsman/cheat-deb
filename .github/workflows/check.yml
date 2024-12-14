@@ -23,6 +23,8 @@ jobs:
           if [ "${REPO_NAME}" != "" ] && [ "${REPO_USER}" != "" ]; then
               echo "Cannot have both variables defined" && exit 1
               gh run cancel ${{ github.run_id }}
+          else:
+            exit 0
           fi
 
       - name: Get latest release
