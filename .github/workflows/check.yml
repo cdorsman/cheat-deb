@@ -34,11 +34,12 @@ jobs:
           elif [[ "${REPO_USER}" != "" ]]; then
               URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
           fi
+
+          echo $URL
         
           # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -s ${URL} | jq -r ".tag_name")
-          echo "release_tag=${RELEASE_TAG}" >> ${GITHUB_OUTPUT}
-          echo "latest release: ${RELEASE_TAG}"
+          RELEASE_TAG="$(curl -s $URL | jq -r '.tag_name')"
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT; echo "latest release: $RELEASE_TAG"
 
       - name: Compare with previous release
         id: compare_release
