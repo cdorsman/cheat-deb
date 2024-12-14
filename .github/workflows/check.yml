@@ -32,12 +32,10 @@ jobs:
         if: steps.check_vars.outcome == 'success'
         run: |
           if [[ "${APP_NAME}" != "" ]]; then
-              URL="https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest"
+              echo "URL=https://api.github.com/repos/${REPO_NAME}/${APP_NAME}/releases/latest" >> $GITHUB_ENV
           elif [[ "${REPO_USER}" != "" ]]; then
-              URL="https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest"
+              echo "URL=https://api.github.com/repos/${REPO_USER}/${APP_NAME}/releases/latest" >> $GITHUB_ENV
           fi
-
-          echo $URL
         
           # Fetch release information and extract the release tag
           RELEASE_TAG="$(curl -s $URL | jq -r '.tag_name')"
