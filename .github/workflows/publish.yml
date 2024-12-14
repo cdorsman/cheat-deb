@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: cheat/cheat
-          ref: refs/tags/v${{ RELEASE_TAG }}
+          ref: refs/tags/v${{ env.RELEASE_TAG }}
       
       #- name: Store artifacts
       #  run: |
