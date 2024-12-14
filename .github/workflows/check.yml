@@ -23,9 +23,9 @@ jobs:
           [ -n "$REPO_NAME" ] && echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
           [ -n "$REPO_USER" ] && echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV
 
-          if [[ ${{ REPO_NAME }} != "" ]]; then
+          if [[ ${{ repo_name }} != "" ]]; then
               echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
-          elif [[ ${{ REPO_USER }} != "" ]]; then
+          elif [[ ${{ repo_user }} != "" ]]; then
               echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest"
           else
               echo "No URL defined"; exit 1
