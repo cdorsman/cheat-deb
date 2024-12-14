@@ -20,9 +20,9 @@ jobs:
       - name: Define URL
         id: define_url
         run: |
-          if [[ ${{ repo_name }} != "" ]]; then
+          if [[ ${{ REPO_NAME }} != "" ]]; then
               echo "URL=https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest" >> $GITHUB_ENV
-          elif [[ ${{ repo_user }} != "" ]]; then
+          elif [[ ${{ REPO_USER }} != "" ]]; then
               echo "URL=https://api.github.com/repos/$REPO_USER/$APP_NAME/releases/latest" >> $$GITHUB_ENV
           else
               echo "No URL defined"; exit 1
