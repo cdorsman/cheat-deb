@@ -1,6 +1,5 @@
-
-
-jobs:
+- name: Build release
+  jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
