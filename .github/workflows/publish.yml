@@ -29,14 +29,13 @@ jobs:
         run: |
           echo "TAG_NAME=$(cat release/cheat-release-info)" >> $GITHUB_OUTPUT
         
-      - name: Check out repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          token: '${{ secrets.ACCESS_TOKEN }}'
-          github-server-url: 'https://github.com'
-          repository: cheat/cheat
-          ref: HEAD^
-
+          fetch-depth: 2
+      - run:  |
+          git config remote.origin.fetch refs/heads/*:refs/remotes/origin/*
+          git checkout HEAD^          
+          
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
