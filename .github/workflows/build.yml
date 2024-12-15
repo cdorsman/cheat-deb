@@ -1,8 +1,17 @@
-- name: Build release
-  jobs:
+name: Build release
+on:
+  workflow_dispatch:  
+jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
+        with:
+            github-server-url: 'https://github.com'
+            repository: 'cheat/cheat'
+            fetch-tags: 'true'
+            token: '${{ secrets.ACCESS_TOKEN }}'
+            ref: '${{ steps.version.outputs.TAG_NAME }}'
       - name: create sample script
         run: |
           mkdir -p .debpkg/usr/bin
