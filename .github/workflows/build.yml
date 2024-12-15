@@ -1,5 +1,9 @@
 
 
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
       - name: create sample script
         run: |
           mkdir -p .debpkg/usr/bin
