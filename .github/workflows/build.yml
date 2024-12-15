@@ -12,6 +12,7 @@ jobs:
             fetch-tags: 'true'
             token: '${{ secrets.ACCESS_TOKEN }}'
             ref: '${{ steps.version.outputs.TAG_NAME }}'
+            
       - name: create sample script
         run: |
           mkdir -p .debpkg/usr/bin
@@ -24,6 +25,7 @@ jobs:
           mkdir -p .debpkg/DEBIAN
           echo -e "echo postinst" > .debpkg/DEBIAN/postinst
           chmod +x .debpkg/DEBIAN/postinst
+          
       - uses: jiro4989/build-deb-action@v3
         with:
           package: samplescript
