@@ -28,9 +28,6 @@ jobs:
         id: version
         run: |
           echo "TAG_NAME=$(cat release/cheat-release-info)" >> $GITHUB_OUTPUT
-
-      - name: Create key
-        run: cat secrets.SSH
         
       - name: Check out repo
         uses: actions/checkout@v4
