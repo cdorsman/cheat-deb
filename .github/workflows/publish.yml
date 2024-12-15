@@ -35,7 +35,7 @@ jobs:
           token: '${{ secrets.ACCESS_TOKEN }}'
           github-server-url: 'https://github.com'
           repository: cheat/cheat
-          ref: refs/tags/v${{ steps.version.outputs.TAG_NAME }}
+          ref: HEAD^
 
       - name: Create Release
         id: create_release
