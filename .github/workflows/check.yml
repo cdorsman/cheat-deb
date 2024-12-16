@@ -7,21 +7,34 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - run: |
+      - name: Create buildroot
+        id: create-buildroot
+        run: |
           mkdir -p buildroot/tmp;
           echo "build_root=$BUILDROOT" >> $GITHUB_OUTPUT
           echo "build_root=buildroot/" >> $GITHUB_ENV
           
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        id: get_current_tag_dest
         with:
           fetch-depth: 0
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      - uses: oprypin/find-latest-tag@v1
+        id: latest-tag
         with:
-          fallback: 4.4.1
+          repository: cheat/cheat
+          prefix: 'prefix-'
         
+      - uses: actions/checkout@v4
+        with:
+          repository: cheat/cheat
+          path: steps.create-buildroot.outputs.BUILDROOT
+          ref: ${{ steps.latest-tag.outputs.tag }}
+
+      - run: ls -lR $(steps.create-buildroot.outputs.BUILDROOT)
+        #steps.check_release_info.outputs.RELEASE_TAG
 
       
       
