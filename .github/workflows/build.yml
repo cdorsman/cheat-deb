@@ -5,6 +5,14 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
+      - name: Get latest release from cheat
+        id: get_release
+        run: |
+          # Fetch release information and extract the release tag
+          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "latest release: $RELEASE_TAG"
+  
       - name: Download Assets
         uses: i3h/download-release-asset@v1.3.3
         with:
