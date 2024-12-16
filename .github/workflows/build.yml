@@ -9,6 +9,7 @@ jobs:
         with:
             github-server-url: 'https://github.com'
             repository: 'cheat/cheat'
+            owner: 'chrisallenlane'
             fetch-tags: 'true'
             token: '${{ secrets.ACCESS_TOKEN }}'
             ref: '${{ steps.version.outputs.TAG_NAME }}'
