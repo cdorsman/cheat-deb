@@ -11,7 +11,7 @@ jobs:
         id: create-buildroot
         run: |
           mkdir -p buildroot/tmp;
-          echo "build_root=$BUILDROOT" >> $GITHUB_OUTPUT
+          echo "buildroot=buildroot/" >> $GITHUB_OUTPUT
           echo "build_root=buildroot/" >> $GITHUB_ENV
           
       - uses: actions/checkout@v4
