@@ -47,7 +47,7 @@ jobs:
         uses: ncipollo/release-action@v1.14.0
         with:
           name: cheat 
-          owner: chrisallenlane
+          owner: cdorsman
           repo: test-packaging
           prerelease: false
           replacesArtifacts: true
