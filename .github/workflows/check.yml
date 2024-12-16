@@ -28,7 +28,7 @@ jobs:
           owner: chrisallenlane
           repo: cheat/cheat 
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
-          file: 'cheat-linux-amd64.gz' 
+          file: cheat-linux-amd64.gz 
           path:  ${{ env.buildroot }}
           
 
