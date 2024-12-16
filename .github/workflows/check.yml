@@ -9,13 +9,16 @@ jobs:
     steps:
       - run: mkdir -p buildroot/tmp
       - uses: actions/download-artifact@v4
+        id: download-artifact
         with:
           name: current-release-info
           path: buildroot/tmp
+          if-no-files-found: ignore
         env:
           GH_TOKEN: ${{ github.token }}
 
       - name: Display structure of downloaded files
+        if: needs.jdownload-artifact.outputs.job-succeeded == 'true'
         run: ls -R buildroot/tmp
 
     
