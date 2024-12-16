@@ -35,7 +35,7 @@ jobs:
           file: 'cheat-linux-amd64.gz'
           target: '${{ build_root }}'
 
-      - run: ls -lR ${{ build_root }}  
+      - run: ls -lR ${{ steps.create-buildroot.outputs.BUILDROOT }}  
           
           
           
