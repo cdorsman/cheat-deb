@@ -25,7 +25,7 @@ jobs:
       - name: Download Assets
         uses: i3h/download-release-asset@v1.3.3
         with:
-          owner: chrisallenlane
+          owner: cheat
           repo: cheat 
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           file: cheat-linux-amd64.gz 
