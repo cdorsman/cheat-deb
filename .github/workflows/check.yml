@@ -21,17 +21,11 @@ jobs:
           RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
           echo "latest release: $RELEASE_TAG"
-
-      - uses: oprypin/find-latest-tag@v1
-        id: latest-tag
-        with:
-          releases-only: true 
-          repository: cheat/cheat
         
       - name: Download release asset
         uses: dsaltares/fetch-gh-release-asset@master
         with:
-          version: ${{ steps.get_release.outputs.RELEASE_TAG }}
+          version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           repo: 'cheat/cheat'
           file: 'cheat-linux-amd64.gz'
           target: ${{ env.buildroot }}
