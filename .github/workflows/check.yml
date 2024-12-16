@@ -8,18 +8,32 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - run: mkdir -p buildroot/tmp
-      - uses: actions/download-artifact@v4
-        id: download-artifact
+      - uses: actions/checkout@v3
         with:
-          name: current-release-info
-          path: buildroot/tmp
-          if-no-files-found: ignore
+          fetch-depth: 0
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Display structure of downloaded files
-        if: needs.jdownload-artifact.outputs.job-succeeded == 'true'
-        run: ls -R buildroot/tmp
+      - uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 4.4.1
+        
+
+      
+      
+      
+#      - uses: actions/download-artifact@v4 
+#        id: download-artifact
+#        with:
+#          name: current-release-info
+#          path: buildroot/tmp
+#          if-no-files-found: ignore
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+
+#      - name: Display structure of downloaded files
+#        if: needs.jdownload-artifact.outputs.job-succeeded == 'true'
+#        run: ls -R buildroot/tmp
 
     
 #      - name: Get latest release from own repo
