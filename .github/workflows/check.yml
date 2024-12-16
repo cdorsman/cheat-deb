@@ -23,17 +23,7 @@ jobs:
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_ENV
           echo "latest release: $RELEASE_TAG"
 
-      - name: Download Assets
-        uses: i3h/download-release-asset@v1.3.3
-        with:
-          owner: cheat
-          repo: cheat 
-          tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
-          file: cheat-linux-amd64.gz
-          path:  ${{ env.buildroot }}/tmp
-
-      - name: Decompress package
-        run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
+      # Need for version
           
       - name: Call workflow to build code
         uses: benc-uk/workflow-dispatch@v1
