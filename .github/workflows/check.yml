@@ -21,14 +21,6 @@ jobs:
           RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
           echo "latest release: $RELEASE_TAG"
-        
-      - name: Download release asset
-        uses: dsaltares/fetch-gh-release-asset@master
-        with:
-          version: tags/${{ steps.get_release.outputs.RELEASE_TAG  }}
-          repo: 'cheat/cheat'
-          file: 'cheat-linux-amd64.gz'
-          target: ${{ env.buildroot }}
 
       - name: Download Assets
         uses: i3h/download-release-asset@v1.3.3
