@@ -7,45 +7,57 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Get latest release from own repo
-        id: get_release_tag  
-        run: |
-          # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -s https://api.github.com/repos/cdorsman/test-packaging/releases/latest | jq -r '.tag_name')
-          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
-          echo "release_tag=$RELEASE_TAG" >> $GITHUB_ENV
-          echo "latest release: $RELEASE_TAG"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Get latest release from cheat
-        id: get_release
-        run: |
-          # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
-          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
-          echo "latest release: $RELEASE_TAG"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Compare with previous release
-        id: compare_release
-        run: |
-          # Compare the fetched release tag with the previous release tag
-          if [ "${{ steps.check_release_info.outputs.PREVIOUS_RELEASE }}" != "${{ steps.check_release_info.outputs.RELEASE_TAG }}" ]; then
-              echo "release_changed=true" >> $GITHUB_OUTPUT
-              echo "Release changed: true"
-            else
-              echo "release_changed=false" >> $GITHUB_OUTPUT
-              echo "Release changed: false" >> $GITHUB_OUTPUT
-              gh run cancel ${{ github.run_id }}
-            fi
-          fi
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Call workflow to build code
-        if: steps.compare_release.outputs.release_changed == 'true'
-        uses: benc-uk/workflow-dispatch@v1
+      - run: mkdir -p buildroot/tmp
+      - uses: download-artifact@v4
         with:
-          workflow: build.yml
+          name: current-release-info
+          path: buildroot/tmp
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Display structure of downloaded files
+        run: ls -R buildroot/tmp
+
+    
+#      - name: Get latest release from own repo
+#        id: get_release_tag  
+#        run: |
+#          # Fetch release information and extract the release tag
+#          RELEASE_TAG=$(curl -s https://api.github.com/repos/cdorsman/test-packaging/releases/latest | jq -r '.tag_name')
+#          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+#          echo "release_tag=$RELEASE_TAG" >> $GITHUB_ENV
+#          echo "latest release: $RELEASE_TAG"
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+
+ #     - name: Get latest release from cheat
+ #       id: get_release
+ #       run: |
+ #         # Fetch release information and extract the release tag
+ #         RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+ #         echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+ #         echo "latest release: $RELEASE_TAG"
+ #       env:
+ #         GH_TOKEN: ${{ github.token }}
+
+ #     - name: Compare with previous release
+ #       id: compare_release
+ #       run: |
+          # Compare the fetched release tag with the previous release tag
+ #         if [ "${{ steps.check_release_info.outputs.PREVIOUS_RELEASE }}" != "${{ steps.check_release_info.outputs.RELEASE_TAG }}" ]; then
+ #             echo "release_changed=true" >> $GITHUB_OUTPUT
+ #             echo "Release changed: true"
+ #           else
+ #             echo "release_changed=false" >> $GITHUB_OUTPUT
+ #             echo "Release changed: false" >> $GITHUB_OUTPUT
+ #             gh run cancel ${{ github.run_id }}
+ #           fi
+ #         fi
+ #       env:
+ #         GH_TOKEN: ${{ github.token }}
+
+ #     - name: Call workflow to build code
+ #       if: steps.compare_release.outputs.release_changed == 'true'
+ #       uses: benc-uk/workflow-dispatch@v1
+ #       with:
+ #         workflow: build.yml
