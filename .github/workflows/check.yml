@@ -25,10 +25,19 @@ jobs:
       - name: Download release asset
         uses: dsaltares/fetch-gh-release-asset@master
         with:
-          version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
+          version: tags/${{ steps.get_release.outputs.RELEASE_TAG  }}
           repo: 'cheat/cheat'
           file: 'cheat-linux-amd64.gz'
           target: ${{ env.buildroot }}
+
+      - name: Download Assets
+        uses: i3h/download-release-asset@v1.3.3
+        with:
+          repo: cheat/cheat 
+          tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
+          file: 'cheat-linux-amd64.gz' 
+          path:  ${{ env.buildroot }}
+          
 
       - run: ls -lR ${{ env.buildroot }}
           
