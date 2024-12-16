@@ -14,12 +14,13 @@ jobs:
           echo "buildroot=buildroot/" >> $GITHUB_OUTPUT
           echo "buildroot=buildroot/" >> $GITHUB_ENV
           
-      - uses: actions/checkout@v4
-        id: get_current_tag_dest
-        with:
-          fetch-depth: 0
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Get latest release from cheat
+        id: get_release
+        run: |
+          # Fetch release information and extract the release tag
+          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "latest release: $RELEASE_TAG"
 
       - uses: oprypin/find-latest-tag@v1
         id: latest-tag
@@ -30,7 +31,7 @@ jobs:
       - name: Download release asset
         uses: dsaltares/fetch-gh-release-asset@master
         with:
-          version: ${{ steps.latest-tag.outputs.tag }}
+          version: ${{ steps.get_release.outputs.RELEASE_TAG }}
           repo: 'cheat/cheat'
           file: 'cheat-linux-amd64.gz'
           target: ${{ env.buildroot }}
