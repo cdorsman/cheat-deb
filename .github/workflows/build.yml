@@ -5,35 +5,30 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Download Assets
+        uses: i3h/download-release-asset@v1.3.3
         with:
-            github-server-url: 'https://github.com'
-            repository: 'cheat/cheat'
-            owner: 'chrisallenlane'
-            fetch-tags: 'true'
-            token: '${{ secrets.ACCESS_TOKEN }}'
-            ref: '${{ steps.version.outputs.TAG_NAME }}'
+          owner: cheat
+          repo: cheat 
+          tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
+          file: cheat-linux-amd64.gz
+          path:  ${{ env.buildroot }}/tmp
+
+      - name: Decompress package
+        run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
             
       - name: create sample script
         run: |
-          mkdir -p .debpkg/usr/bin
-          mkdir -p .debpkg/usr/lib/samplescript
-          echo -e "echo sample" > .debpkg/usr/bin/samplescript
-          chmod +x .debpkg/usr/bin/samplescript
-          echo -e "a=1" > .debpkg/usr/lib/samplescript/samplescript.conf
-
-          # create DEBIAN directory if you want to add other pre/post scripts
-          mkdir -p .debpkg/DEBIAN
-          echo -e "echo postinst" > .debpkg/DEBIAN/postinst
-          chmod +x .debpkg/DEBIAN/postinst
+          mkdir -p .debpkg/usr/local/bin
+          cp ${{ env.buildroot }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
+          chmod +x .debpkg/usr/local/bin/cheat
           
       - uses: jiro4989/build-deb-action@v3
         with:
-          package: samplescript
+          package: cheat
           package_root: .debpkg
-          maintainer: your_name
-          version: ${{ github.ref }} # refs/tags/v*.*.*
+          maintainer: cdorsman
+          version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           arch: 'amd64'
-          depends: 'libc6 (>= 2.2.1), git'
-          desc: 'this is sample package.'
+          desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
           homepage: 'https://github.com/jiro4989/build-deb-action'
