@@ -40,3 +40,15 @@ jobs:
           arch: 'amd64'
           desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
           homepage: 'https://github.com/jiro4989/build-deb-action'
+
+      - name: Create Release
+        # You may pin to the exact commit or the version.
+        # uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          name: cheat 
+          owner: chrisallenlane
+          repo: test-packaging
+          prerelease: false
+          replacesArtifacts: true
+          tag:  ${{ steps.get_release.outputs.RELEASE_TAG  }} 
