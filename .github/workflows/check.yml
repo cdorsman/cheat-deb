@@ -13,6 +13,8 @@ jobs:
         with:
           name: cheat-release-info
           if_no_artifact_found: warn
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Get latest release
         id: get_release
