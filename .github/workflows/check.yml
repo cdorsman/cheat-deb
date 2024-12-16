@@ -28,7 +28,7 @@ jobs:
           # Read the release info from the downloaded artifact
           PREVIOUS_RELEASE=$(cat cheat-release-info 2> /dev/null || echo "NONE")
           echo "previous release: $PREVIOUS_RELEASE" >> $GITHUB_OUTPUT
-          if [ -z "$PREVIOUS_RELEASE" ]; then
+          if [[ "$PREVIOUS_RELEASE"="NONE" ]]; then
               gh run cancel ${{ github.run_id }}
           fi
 
