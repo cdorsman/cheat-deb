@@ -33,7 +33,7 @@ jobs:
           version: '${{ steps.latest-tag.outputs.tag }}'
           repo: 'cheat/cheat'
           file: 'cheat-linux-amd64.gz'
-          target: '${{ build_root }}'
+          target: '${{ buildroot }}'
 
       # - run: ls -lR ${{ steps.create-buildroot.outputs.BUILDROOT }}  
           
