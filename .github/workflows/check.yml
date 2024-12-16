@@ -12,7 +12,7 @@ jobs:
         run: |
           mkdir -p buildroot/tmp;
           echo "buildroot=buildroot/" >> $GITHUB_OUTPUT
-          echo "build_root=buildroot/" >> $GITHUB_ENV
+          echo "buildroot=buildroot/" >> $GITHUB_ENV
           
       - uses: actions/checkout@v4
         id: get_current_tag_dest
