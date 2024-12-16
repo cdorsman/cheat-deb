@@ -37,6 +37,8 @@ jobs:
               gh run cancel ${{ github.run_id }}
             fi
           fi
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Call workflow to build code
         if: steps.compare_release.outputs.release_changed == 'true'
