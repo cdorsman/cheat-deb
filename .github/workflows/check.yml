@@ -25,7 +25,6 @@ jobs:
         id: latest-tag
         with:
           repository: cheat/cheat
-          prefix: 'prefix-'
         
       - uses: actions/checkout@v4
         with:
