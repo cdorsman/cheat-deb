@@ -35,16 +35,16 @@ jobs:
             
      - name: Move program
        run: |
-          sudo mkdir -p ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin
+          sudo mkdir -p ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin
           sudo chown -R $(whoami) ${{ vars.BUILD_ROOT }}
-          cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
+          cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin/cheat
           sudo ls -lR ${{ vars.BUILD_ROOT }}
-          chmod +x ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
+          chmod +x ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin/cheat
          
      - uses: jiro4989/build-deb-action@v3
        with:
           package: ${{ vars.APP_NAME }}
-          package_root: ${{ vars.BUILD_ROOT }}/.debpkg
+          package_root: ${{ vars.BUILD_ROOT }}/debpkg
           maintainer: cdorsman
           version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           arch: ${{ vars.BUILD_ARCH }}
