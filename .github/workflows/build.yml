@@ -24,8 +24,8 @@ jobs:
      - name: Download Assets
        uses: i3h/download-release-asset@v1.3.3
        with:
-          owner: cheat
-          repo: cheat 
+          owner: ${{ vars.REPO_OWNER }}
+          repo: ${{ vars.REPO_NAME }}
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           file: ${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
           path:  ${{ vars.BUILD_ROOT }}/tmp
