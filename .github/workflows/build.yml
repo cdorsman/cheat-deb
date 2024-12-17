@@ -33,9 +33,10 @@ jobs:
             
      - name: Move program
        run: |
-          mkdir -p ${{ vars.BUILD_ROOT }}.debpkg/usr/local/bin
+          sudo mkdir -p ${{ vars.BUILD_ROOT }}.debpkg/usr/local/bin
+          sudo chmod -R 777 ${{ vars.BUILD_ROOT }}
           cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}.debpkg/usr/local/bin/cheat
-          chmod +x .debpkg/usr/local/bin/cheat
+          sudo chmod +x ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
           
      - uses: jiro4989/build-deb-action@v3
        with:
