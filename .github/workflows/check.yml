@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Get latest release from cheat
-        id: get_release
+        id: get_release_src
         shell: bash
         run: |
           # Fetch release information and extract the release tag
@@ -16,15 +16,21 @@ jobs:
           RELEASE_TAG_SRC="$(curl -sL $URL | jq -r '.tag_name')"
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_OUTPUT
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_ENV
-          echo "latest release: $RELEASE_TAG_SRC"
+          echo "latest release: $RELEASE_TAG_SRC" 
 
-     # - name: Get latest tag from repo
-        
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-      # Need check for version
-          
-      #- name: Call workflow to build code
-      #  uses: benc-uk/workflow-dispatch@v1
-      #  with:
-      #    workflow: build.yml
+      - name: Compare source with dest repo
+        if: ${{ steps.previoustag.outputs.RELEASE_TAG_SRC }} != ${{ steps.previoustag.outputs.tag }}
+        uses: benc-uk/workflow-dispatch@v1 
+        with:
+          workflow: build.yml
+    
