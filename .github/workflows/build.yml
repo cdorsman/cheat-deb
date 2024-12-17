@@ -2,9 +2,9 @@ name: Build release
 on:
   workflow_dispatch:  
 jobs:
-  check:
+  build:
     runs-on: ubuntu-24.04
-    build:
+    steps:
      - name: Create BUILD_ROOT
        id: create-BUILD_ROOT
        run: |
