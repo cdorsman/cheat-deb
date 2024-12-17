@@ -7,25 +7,22 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Create buildroot
-        id: create-buildroot
-        run: |
-          mkdir -p buildroot/tmp;
-          echo "buildroot=buildroot/" >> $GITHUB_OUTPUT
-          echo "buildroot=buildroot/" >> $GITHUB_ENV
-          
       - name: Get latest release from cheat
         id: get_release
         run: |
           # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
-          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
-          echo "release_tag=$RELEASE_TAG" >> $GITHUB_ENV
-          echo "latest release: $RELEASE_TAG"
+          RELEASE_TAG_SRC=$(curl -sL https://api.github.com/repos/${{ REPO_NAME }}/${{ APP_NAME }}/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_OUTPUT
+          echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_ENV
+          echo "latest release: $RELEASE_TAG_SRC"
 
-      # Need for version
+      - name: Get latest tag from repo
+        
+
+
+      # Need check for version
           
-      - name: Call workflow to build code
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: build.yml
+      #- name: Call workflow to build code
+      #  uses: benc-uk/workflow-dispatch@v1
+      #  with:
+      #    workflow: build.yml
