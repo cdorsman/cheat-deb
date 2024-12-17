@@ -33,7 +33,7 @@ jobs:
      - name: Decompress package
        run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
             
-     - name: create sample script
+     - name: Move program
        run: |
           mkdir -p .debpkg/usr/local/bin
           cp ${{ env.buildroot }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
