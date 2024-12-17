@@ -8,8 +8,7 @@ jobs:
      - name: Create BUILD_ROOT
        id: create-BUILD_ROOT
        run: |
-          cd ..
-          rm -rf ./*
+          rm -rf ./.github
           mkdir ${{ vars.BUILD_ROOT }}
           
      - name: Get latest release from cheat
