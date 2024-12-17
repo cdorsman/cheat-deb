@@ -29,7 +29,7 @@ jobs:
 
      - name: Decompress package
        run: |
-         mkdir ${{ vars.BUILD_ROOT }}/tmp
+         mkdir -p ${{ vars.BUILD_ROOT }}/tmp
          gunzip ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
             
      - name: Move program
