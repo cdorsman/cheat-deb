@@ -4,15 +4,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: ${{ vars.BUILD_ROOT }}
     steps:
      - name: Create BUILD_ROOT
        id: create-BUILD_ROOT
        run: |
           mkdir ${{ vars.BUILD_ROOT }}
-          cd ${{ vars.BUILD_ROOT }}
           
      - name: Get latest release from cheat
        id: get_release
