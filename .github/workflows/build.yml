@@ -29,7 +29,7 @@ jobs:
           path:  ${{ vars.BUILDROOT }}/tmp
 
      - name: Decompress package
-       run: gunzip ${{ vars.buildroot }}/tmp/${{ vars.APP_NAME }}-${{ BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+       run: gunzip ${{ vars.BUILDROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
             
      - name: Move program
        run: |
