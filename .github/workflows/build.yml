@@ -8,16 +8,14 @@ jobs:
      - name: Create buildroot
        id: create-buildroot
        run: |
-          sudo mkdir -p /buildroot/tmp
-          sudo chmod -R 777 /buildroot/tmp
-          echo "buildroot=/buildroot" >> $GITHUB_OUTPUT
-          echo "buildroot=/buildroot" >> $GITHUB_ENV
+          sudo mkdir -p ${{ vars.BUILDROOT }}
+          sudo chmod -R 777 ${{ vars.BUILDROOT }}
           
      - name: Get latest release from cheat
        id: get_release
        run: |
           # Fetch release information and extract the release tag
-          RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
+          RELEASE_TAG=$(curl -sL https://api.github.com/repos/${{ vars.REPO_OWNER }}/${{ vars.REPO_NAME }}/releases/latest | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
           echo "latest release: $RELEASE_TAG"
   
@@ -27,11 +25,11 @@ jobs:
           owner: cheat
           repo: cheat 
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
-          file: cheat-linux-amd64.gz
-          path:  ${{ env.buildroot }}/tmp
+          file: ${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+          path:  ${{ vars.BUILDROOT }}/tmp
 
      - name: Decompress package
-       run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
+       run: gunzip ${{ vars.buildroot }}/tmp/${{ vars.APP_NAME }}-${{ BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
             
      - name: Move program
        run: |
@@ -41,11 +39,11 @@ jobs:
           
      - uses: jiro4989/build-deb-action@v3
        with:
-          package: cheat
+          package: ${{ vars.APP_NAME }}
           package_root: .debpkg
           maintainer: cdorsman
           version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
-          arch: 'amd64'
+          arch: ${{ vars.BUILD_ARCH }}
           desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
           homepage: 'https://github.com/jiro4989/build-deb-action'
 
@@ -55,8 +53,8 @@ jobs:
        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
-          tag_name: ${{ steps.get_release.outputs.RELEASE_TAG  }}
-          release_name: cheat
+          tag_name: ${{ steps.get_release.outputs.RELEASE_TAG }}
+          release_name: ${{ vars.APP_NAME }}
           draft: false
           prerelease: false
 
@@ -67,5 +65,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_name: cheat_4.4.2_amd64.deb
+          asset_name: ${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.deb
           asset_content_type: application/deb
