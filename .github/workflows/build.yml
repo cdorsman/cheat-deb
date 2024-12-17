@@ -51,8 +51,7 @@ jobs:
 
      - run: |
          ls -la .
-         ls -la ${{ vars.BUILD_ROOT }}
-         ls -la ${{ vars.BUILD_ROOT }}/debpkg
+         ls -la ./debpkg
 
      - name: Create Release
        id: create_release
