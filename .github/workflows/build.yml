@@ -8,7 +8,7 @@ jobs:
      - name: Create buildroot
        id: create-buildroot
        run: |
-          mkdir -p buildroot/tmp;
+          sudo mkdir -p /buildroot/tmp;
           echo "buildroot=/buildroot" >> $GITHUB_OUTPUT
           echo "buildroot=/buildroot" >> $GITHUB_ENV
           
