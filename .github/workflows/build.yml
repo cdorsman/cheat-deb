@@ -34,7 +34,7 @@ jobs:
      - name: Move program
        run: |
           mkdir -p .debpkg/usr/local/bin
-          cp ${{ env.BUILD_ROOT }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
+          cp ${{ vars.BUILD_ROOT }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
           chmod +x .debpkg/usr/local/bin/cheat
           
      - uses: jiro4989/build-deb-action@v3
