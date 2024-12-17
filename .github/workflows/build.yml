@@ -11,6 +11,7 @@ jobs:
      - name: Create BUILD_ROOT
        id: create-BUILD_ROOT
        run: |
+          mkdir ${{ vars.BUILD_ROOT }}
           cd ${{ vars.BUILD_ROOT }}
           
      - name: Get latest release from cheat
