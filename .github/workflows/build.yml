@@ -4,13 +4,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ vars.BUILD_ROOT }}
     steps:
      - name: Create BUILD_ROOT
        id: create-BUILD_ROOT
        run: |
-          sudo mkdir -p ${{ vars.BUILD_ROOT }}
-          sudo chmod -R 777 ${{ vars.BUILD_ROOT }}
-          sudo chown -R $(whoami) ${{ vars.BUILD_ROOT }}
           cd ${{ vars.BUILD_ROOT }}
           
      - name: Get latest release from cheat
@@ -31,14 +31,14 @@ jobs:
           path:  ${{ vars.BUILD_ROOT }}/tmp
 
      - name: Decompress package
-       run: gunzip ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+       run: |
+         mkdir ${{ vars.BUILD_ROOT }}/tmp
+         gunzip ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
             
      - name: Move program
        run: |
-          sudo mkdir -p ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin
-          sudo chown -R $(whoami) ${{ vars.BUILD_ROOT }}
+          mkdir -p ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin
           cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin/cheat
-          sudo ls -lR ${{ vars.BUILD_ROOT }}
           chmod +x ${{ vars.BUILD_ROOT }}/debpkg/usr/local/bin/cheat
          
      - uses: jiro4989/build-deb-action@v3
