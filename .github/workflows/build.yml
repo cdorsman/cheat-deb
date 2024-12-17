@@ -5,11 +5,11 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-     - name: Create buildroot
-       id: create-buildroot
+     - name: Create BUILD_ROOT
+       id: create-BUILD_ROOT
        run: |
-          sudo mkdir -p ${{ vars.BUILDROOT }}
-          sudo chmod -R 777 ${{ vars.BUILDROOT }}
+          sudo mkdir -p ${{ vars.BUILD_ROOT }}
+          sudo chmod -R 777 ${{ vars.BUILD_ROOT }}
           
      - name: Get latest release from cheat
        id: get_release
@@ -26,19 +26,20 @@ jobs:
           repo: cheat 
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           file: ${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
-          path:  ${{ vars.BUILDROOT }}/tmp
+          path:  ${{ vars.BUILD_ROOT }}/tmp
 
      - name: Decompress package
-       run: gunzip ${{ vars.BUILDROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+       run: gunzip ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
             
      - name: Move program
        run: |
           mkdir -p .debpkg/usr/local/bin
-          cp ${{ env.buildroot }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
+          cp ${{ env.BUILD_ROOT }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
           chmod +x .debpkg/usr/local/bin/cheat
           
      - uses: jiro4989/build-deb-action@v3
        with:
+          working-directory: ${{ env.BUILD_ROOT }}
           package: ${{ vars.APP_NAME }}
           package_root: .debpkg
           maintainer: cdorsman
