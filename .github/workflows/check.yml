@@ -16,7 +16,7 @@ jobs:
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_ENV
           echo "latest release: $RELEASE_TAG_SRC"
 
-      - name: Get latest tag from repo
+     # - name: Get latest tag from repo
         
 
 
