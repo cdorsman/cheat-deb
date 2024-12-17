@@ -49,7 +49,9 @@ jobs:
           desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
           homepage: 'https://github.com/cheat/cheat'
 
-     - run: ls -la ${{ vars.BUILD_ROOT }}/debpkg
+     - run: |
+         ls -la ${{ vars.BUILD_ROOT }}
+         ls -la ${{ vars.BUILD_ROOT }}/debpkg
 
      - name: Create Release
        id: create_release
