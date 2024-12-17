@@ -50,6 +50,7 @@ jobs:
           homepage: 'https://github.com/cheat/cheat'
 
      - run: |
+         ls -la .
          ls -la ${{ vars.BUILD_ROOT }}
          ls -la ${{ vars.BUILD_ROOT }}/debpkg
 
