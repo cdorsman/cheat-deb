@@ -9,8 +9,8 @@ jobs:
        id: create-buildroot
        run: |
           mkdir -p buildroot/tmp;
-          echo "buildroot=./buildroot" >> $GITHUB_OUTPUT
-          echo "buildroot=./buildroot" >> $GITHUB_ENV
+          echo "buildroot=/buildroot" >> $GITHUB_OUTPUT
+          echo "buildroot=/buildroot" >> $GITHUB_ENV
           
      - name: Get latest release from cheat
        id: get_release
