@@ -40,7 +40,6 @@ jobs:
           
      - uses: jiro4989/build-deb-action@v3
        with:
-          working-directory: ${{ vars.BUILD_ROOT }}
           package: ${{ vars.APP_NAME }}
           package_root: ${{ vars.BUILD_ROOT }}/.debpkg
           maintainer: cdorsman
