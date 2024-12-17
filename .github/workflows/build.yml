@@ -36,10 +36,9 @@ jobs:
      - name: Move program
        run: |
           sudo mkdir -p ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin
-          sudo chmod -R 777 ${{ vars.BUILD_ROOT }}
-          sudo cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
           sudo chown -R $(whoami) ${{ vars.BUILD_ROOT }}
-          sudo chmod +x ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
+          cp ${{ vars.BUILD_ROOT }}/tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }} ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
+          chmod +x ${{ vars.BUILD_ROOT }}/.debpkg/usr/local/bin/cheat
           
      - uses: jiro4989/build-deb-action@v3
        with:
@@ -49,7 +48,7 @@ jobs:
           version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           arch: ${{ vars.BUILD_ARCH }}
           desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
-          homepage: 'https://github.com/jiro4989/build-deb-action'
+          homepage: 'https://github.com/cheat/cheat'
 
      - name: Create Release
        id: create_release
