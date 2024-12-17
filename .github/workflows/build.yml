@@ -72,5 +72,5 @@ jobs:
        with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_name: ${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.deb
-          asset_path: .
+          asset_path: ./${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.deb
           asset_content_type: application/deb
