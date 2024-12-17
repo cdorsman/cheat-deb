@@ -5,34 +5,41 @@ jobs:
   check:
     runs-on: ubuntu-24.04
     steps:
-      - name: Get latest release from cheat
-        id: get_release
-        run: |
+     - name: Create buildroot
+       id: create-buildroot
+       run: |
+          mkdir -p buildroot/tmp;
+          echo "buildroot=buildroot/" >> $GITHUB_OUTPUT
+          echo "buildroot=buildroot/" >> $GITHUB_ENV
+          
+     - name: Get latest release from cheat
+       id: get_release
+       run: |
           # Fetch release information and extract the release tag
           RELEASE_TAG=$(curl -sL https://api.github.com/repos/cheat/cheat/releases/latest | jq -r '.tag_name')
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
           echo "latest release: $RELEASE_TAG"
   
-      - name: Download Assets
-        uses: i3h/download-release-asset@v1.3.3
-        with:
+     - name: Download Assets
+       uses: i3h/download-release-asset@v1.3.3
+       with:
           owner: cheat
           repo: cheat 
           tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           file: cheat-linux-amd64.gz
           path:  ${{ env.buildroot }}/tmp
 
-      - name: Decompress package
-        run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
+     - name: Decompress package
+       run: gunzip ${{ env.buildroot }}/tmp/cheat-linux-amd64.gz
             
-      - name: create sample script
-        run: |
+     - name: create sample script
+       run: |
           mkdir -p .debpkg/usr/local/bin
           cp ${{ env.buildroot }}/tmp/cheat-linux-amd64 .debpkg/usr/local/bin/cheat
           chmod +x .debpkg/usr/local/bin/cheat
           
-      - uses: jiro4989/build-deb-action@v3
-        with:
+     - uses: jiro4989/build-deb-action@v3
+       with:
           package: cheat
           package_root: .debpkg
           maintainer: cdorsman
@@ -41,23 +48,23 @@ jobs:
           desc: 'With cheat you can create and view interactive cheatsheets on the command-line.'
           homepage: 'https://github.com/jiro4989/build-deb-action'
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
+     - name: Create Release
+       id: create_release
+       uses: actions/create-release@v1
+       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
+       with:
           tag_name: ${{ steps.get_release.outputs.RELEASE_TAG  }}
           release_name: cheat
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
+     - name: Upload Release Asset
+       id: upload-release-asset 
+       uses: actions/upload-release-asset@v1
+       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
+       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ${{ env.buildroot }}/cheat_4.4.2_amd64.deb
           asset_name: cheat_4.4.2_amd64.deb
