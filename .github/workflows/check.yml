@@ -12,8 +12,8 @@ jobs:
         shell: bash
         run: |
           # Fetch release information and extract the release tag
-          echo "URL=https://api.github.com/repos/${{ vars.REPO_NAME }}/${{ vars.APP_NAME }}/releases/latest" >> $GITHUB_ENV
-          RELEASE_TAG_SRC="$(curl -sL ${{ vars.URL }} | jq -r '.tag_name')"
+          URL="https://api.github.com/repos/${{ vars.REPO_NAME }}/${{ vars.APP_NAME }}/releases/latest"
+          RELEASE_TAG_SRC="$(curl -sL $URL | jq -r '.tag_name')"
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_OUTPUT
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_ENV
           echo "latest release: $RELEASE_TAG_SRC"
