@@ -11,7 +11,7 @@ jobs:
         id: get_release
         run: |
           # Fetch release information and extract the release tag
-          RELEASE_TAG_SRC="$(curl -sL https://api.github.com/repos/${{ env.REPO_NAME }}/${{ env.APP_NAME }}/releases/latest | jq -r '.tag_name')"
+          RELEASE_TAG_SRC="$(curl -sL https://api.github.com/repos/$REPO_NAME/$APP_NAME/releases/latest | jq -r '.tag_name')"
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_OUTPUT
           echo "release_tag=$RELEASE_TAG_SRC" >> $GITHUB_ENV
           echo "latest release: $RELEASE_TAG_SRC"
