@@ -1,5 +1,5 @@
 # cheat-db
-This began as a test for building APT packages. Since the owner/creator of Cheat does not have APT package I took the liberty to create Github Actions workflow to create APT packages for Cheat
+This began as a test for building APT packages. Since the owner/creator of Cheat does not have APT package I took the liberty to create Github Actions workflow to create APT packages for Cheat.
 
 # Installation
 Download the latest release and install like so:
