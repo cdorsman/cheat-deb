@@ -29,7 +29,7 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
       - name: Compare source with dest repo
-        if: ${{ steps.get_release_src.outputs.RELEASE_TAG_SRC }} != ${{ steps.previoustag.outputs.tag }}
+        if: ${{ steps.get_release_src.outputs.RELEASE_TAG_SRC != steps.previoustag.outputs.tag }}
         uses: benc-uk/workflow-dispatch@v1 
         with:
           workflow: build.yml
