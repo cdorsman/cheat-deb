@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         shell: bash
         run: |
-            if [[ "${{ steps.previoustag.outputs.tag }}" == "${{ steps.get_release_src.outputs.RELEASE_TAG_SRC }}" ]]; then
+            if [[ "${{ steps.previoustag.outputs.tag }}" == "${{ env.release_tag }}" ]]; then
                 gh run cancel ${{ github.run_id }}
             fi
         
