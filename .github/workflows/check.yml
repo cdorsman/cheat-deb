@@ -26,10 +26,19 @@ jobs:
 
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: WyriHaximus/github-action-get-previous-tag@v1
 
       - name: Compare source with dest repo
-        if: ${{ steps.get_release_src.outputs.RELEASE_TAG_SRC != steps.previoustag.outputs.tag }}
+        id: compare_versions
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        shell: bash
+        run: |
+            if [[ ${{ steps.previoustag.outputs.tag }} == ${{ steps.get_release_src.outputs.RELEASE_TAG_SRC }} ]]; then
+                gh run cancel ${{ github.run_id }}
+            fi
+        
+      - name: Start build    
         uses: benc-uk/workflow-dispatch@v1 
         with:
           workflow: build.yml
