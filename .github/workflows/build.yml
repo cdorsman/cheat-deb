@@ -2,11 +2,11 @@ name: Build release
 on:
   workflow_dispatch:  
 jobs:
-  build-deb:
+  build-dep:
     runs-on: ubuntu-24.04
     steps:
      - name: Create BUILD_ROOT
-       id: create_build_root
+       id: create-BUILD_ROOT
        run: |
           rm -rf ./.github
           mkdir -p ${{ vars.BUILD_ROOT }}/tmp
@@ -70,4 +70,69 @@ jobs:
           asset_name: ${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.deb
           asset_path: ./${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.deb
           asset_content_type: application/deb
- 
+  build-rpm:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Create BUILD_ROOT
+        id: create-BUILD_ROOT
+        run: |
+          rm -rf ./.github
+          mkdir -p ${{ vars.BUILD_ROOT }}/tmp
+          cd ${{ vars.BUILD_ROOT }}
+          
+      - name: Get latest release from cheat
+        id: get_release
+        run: |
+          # Fetch release information and extract the release tag
+          RELEASE_TAG=$(curl -sL https://api.github.com/repos/${{ vars.REPO_OWNER }}/${{ vars.REPO_NAME }}/releases/latest | jq -r '.tag_name')
+          echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "latest release: $RELEASE_TAG"
+  
+      - name: Download Assets
+        uses: i3h/download-release-asset@v1.3.3
+        with:
+          owner: ${{ vars.REPO_OWNER }}
+          repo: ${{ vars.REPO_NAME }}
+          tag: ${{ steps.get_release.outputs.RELEASE_TAG  }}
+          file: ${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+          path:  ./tmp
+
+      - name: Decompress package
+        run: |
+         gunzip ./tmp/${{ vars.APP_NAME }}-${{ vars.BUILD_PLATFORM }}-${{ vars.BUILD_ARCH }}.gz
+
+      - name: build-rpm-action
+        # You may pin to the exact commit or the version.
+        # uses: jiro4989/build-rpm-action@cbf614c00042a6a03a92358b8f362d3947f691d9
+        uses: jiro4989/build-rpm-action@v1.0.2
+        with:
+          # Package summary.
+          summary: 'With cheat you can create and view interactive cheatsheets on the command-line.' 
+          # Package name of rpm package.
+          package: ${{ vars.APP_NAME }}
+          # Directory of release files.
+          package_root: ./rpm
+          # Package maintainer name.
+          maintainer: 'cdorsman'
+          # Package vendor.
+          vendor: 'Chris Allen Lane' 
+          # Package version.
+          version: ${{ steps.get_release.outputs.RELEASE_TAG  }}
+          # Package architecture.
+          arch: 'x86_64'
+          # Package description.
+          desc: 'With cheat you can create and view interactive cheatsheets on the command-line.' 
+          # Package LICENSE.
+          license: 'MIT'
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_name: ${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.rpm
+          asset_path: ./${{ vars.APP_NAME }}_${{ steps.get_release.outputs.RELEASE_TAG }}_${{ vars.BUILD_ARCH }}.rpm
+          asset_content_type: application/rpm
+      
